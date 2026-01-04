@@ -2,9 +2,6 @@
 
 **This is a fork of JackKenney/true-color-window-invert due to 2+ years of inactivity on the project**
 
-**Gnome 45**
-Now working for GNOME 45!
-
 GNOME shell extension for inverting window colors in hue preserving manner. Effectively a manual dark theme for GNOME windows.
 
 Available on the GNOME Extensions website here:
@@ -13,13 +10,79 @@ https://extensions.gnome.org/extension/5829/true-color-invert/
 
 ## Supported Versions
 
-- Gnome 45
+- GNOME 45
+- GNOME 46
+- GNOME 47
+- GNOME 48
 
-Deprecated versions should work, but will not be supported nor will they recieve any further updates.
+Deprecated versions should work, but will not be supported nor will they receive any further updates.
+
+## Installation
+
+### From GNOME Extensions Website
+Visit https://extensions.gnome.org/extension/5829/true-color-invert/ and install with one click.
+
+### From Source
+
+1. **Build the extension:**
+   ```bash
+   ./build.sh
+   ```
+   This creates `true-color-window-invert@lynet101.zip`
+
+2. **Install the extension:**
+   ```bash
+   gnome-extensions install true-color-window-invert@lynet101.zip
+
+   # Or to update an existing installation:
+   gnome-extensions install --force true-color-window-invert@lynet101.zip
+   ```
+
+3. **Restart GNOME Shell:**
+   - **Wayland**: Log out and back in
+   - **X11**: Press `Alt+F2`, type `r`, press Enter
+
+4. **Enable the extension:**
+   ```bash
+   gnome-extensions enable true-color-window-invert@lynet101
+   ```
+
+5. **Verify installation:**
+   ```bash
+   gnome-extensions list --enabled | grep true-color
+   ```
+
+### Development Installation
+
+For faster iteration during development, symlink the extension:
+```bash
+mkdir -p ~/.local/share/gnome-shell/extensions
+ln -s $(pwd) ~/.local/share/gnome-shell/extensions/true-color-window-invert@lynet101
+gnome-extensions enable true-color-window-invert@lynet101
+# Restart GNOME Shell as above
+```
 
 ## Keyboard Shortcut
 
-`Super + I`
+**Default:** `Super + I`
+
+Press this shortcut while a window is focused to toggle color inversion on that window.
+
+### Customizing the Keybind
+
+You can change the keyboard shortcut using `gsettings`:
+
+```bash
+# View current keybind
+gsettings get org.gnome.shell.extensions.true-color-window-invert invert-window-shortcut
+
+# Change to a different keybind (examples)
+gsettings set org.gnome.shell.extensions.true-color-window-invert invert-window-shortcut "['<Ctrl><Alt>I']"
+gsettings set org.gnome.shell.extensions.true-color-window-invert invert-window-shortcut "['<Super><Shift>I']"
+
+# Reset to default
+gsettings reset org.gnome.shell.extensions.true-color-window-invert invert-window-shortcut
+```
 
 ## Debugging
 
