@@ -67,15 +67,28 @@ export default class TrueColorWindowInvert extends Extension {
         logger('Extension enabled');
         this._settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
         this._toggleEffect = this._toggleEffect.bind(this);
-        let extensionSettings = this.getSettings();
+        this._extensionSettings = this.getSettings();
 
         Main.wm.addKeybinding(
             'invert-window-shortcut',
-            extensionSettings,
+            this._extensionSettings,
             Meta.KeyBindingFlags.NONE,
             Shell.ActionMode.NORMAL,
             this._toggleEffect
         );
+
+        // Listen for keybinding changes and re-register
+        this._keybindingChangedId = this._extensionSettings.connect('changed::invert-window-shortcut', () => {
+            logger('Keybinding changed, re-registering');
+            Main.wm.removeKeybinding('invert-window-shortcut');
+            Main.wm.addKeybinding(
+                'invert-window-shortcut',
+                this._extensionSettings,
+                Meta.KeyBindingFlags.NONE,
+                Shell.ActionMode.NORMAL,
+                this._toggleEffect
+            );
+        });
 
         this._connectThemeChangeSignal();
         this._connectWindowCreatedSignal();
@@ -154,6 +167,9 @@ export default class TrueColorWindowInvert extends Extension {
         }
         if (this._windowCreatedSignalId) {
             global.display.disconnect(this._windowCreatedSignalId);
+        }
+        if (this._keybindingChangedId) {
+            this._extensionSettings.disconnect(this._keybindingChangedId);
         }
     }
 
