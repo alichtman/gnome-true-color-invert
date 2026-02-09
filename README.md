@@ -14,6 +14,7 @@ https://extensions.gnome.org/extension/5829/true-color-invert/
 - GNOME 46
 - GNOME 47
 - GNOME 48
+- GNOME 49
 
 Deprecated versions should work, but will not be supported nor will they receive any further updates.
 
